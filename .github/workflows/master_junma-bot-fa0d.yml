@@ -39,22 +39,13 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: node-app
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2E5751DDCC8D40529364C5F240A1188E }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3FED6290839A433FBD5DEB4137CA5B77 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_13E648FFC140409188B8008F5DC25FB5 }}
-
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
@@ -62,4 +53,4 @@ jobs:
           app-name: 'Junma-bot-fa0d'
           slot-name: 'Production'
           package: .
-          
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BC0DE83FA4ED4B558F6332763E043918 }}
